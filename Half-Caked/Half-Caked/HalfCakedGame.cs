@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
@@ -16,6 +17,8 @@ namespace Half_Caked
         #region Fields
         GraphicsDeviceManager graphics;
         ScreenManager screenManager;
+        public Profile CurrentProfile;
+        public StorageDevice Device;
         #endregion
 
         #region Initalization
@@ -35,6 +38,7 @@ namespace Half_Caked
             // Activate the first screens.
             screenManager.AddScreen(new BackgroundScreen(), null);
             screenManager.AddScreen(new MainMenuScreen(), null);
+
         }
 
         /// <summary>
@@ -48,6 +52,13 @@ namespace Half_Caked
             // TODO: Add your initialization logic here
             base.Initialize();
 
+            IAsyncResult  result = StorageDevice.BeginShowSelector(PlayerIndex.One, null, null);
+            result.AsyncWaitHandle.WaitOne();
+            Device = StorageDevice.EndShowSelector(result);
+            CurrentProfile = Profile.Load(-1, Device);
+
+            if (CurrentProfile == null)
+                screenManager.AddScreen(new ProfileSelectionScreen(Device), null);
             //LevelCreator.CreateAndSaveLevel(0);
             //LevelCreator.CreateAndSaveLevel(1);
         }

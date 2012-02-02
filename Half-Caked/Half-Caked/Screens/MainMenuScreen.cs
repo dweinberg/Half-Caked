@@ -54,8 +54,7 @@ namespace Half_Caked
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
-                               new GameplayScreen(0));
+            ScreenManager.AddScreen(new LevelSelectionScreen((ScreenManager.Game as HalfCakedGame).CurrentProfile), e.PlayerIndex);
         }
 
 
@@ -64,7 +63,7 @@ namespace Half_Caked
         /// </summary>
         void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
+            ScreenManager.AddScreen(new OptionsMenuScreen((ScreenManager.Game as HalfCakedGame).CurrentProfile.Name), e.PlayerIndex);
         }
 
 

@@ -97,7 +97,7 @@ namespace Half_Caked
                 catch (Exception E)
                 {
                     if(E.Message.Equals("LevelComplete"))
-                        ScreenManager.AddScreen(new LevelOverScreen(mLevel), ControllingPlayer);
+                        ScreenManager.AddScreen(new LevelOverScreen(mLevel, (ScreenManager.Game as HalfCakedGame)), ControllingPlayer);
                     else
                         throw E;
                 }

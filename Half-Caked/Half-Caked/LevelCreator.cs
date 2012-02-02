@@ -32,7 +32,6 @@ namespace Half_Caked
                     return;
             }
             SaveLevel(levelIdentifier, lvl);
-            Statistics.SaveHighScores(levelIdentifier, new Statistics[5]);
         }
 
         #endregion

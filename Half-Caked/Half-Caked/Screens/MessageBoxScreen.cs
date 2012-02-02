@@ -32,7 +32,7 @@ namespace Half_Caked
 
         #region Fields
 
-        string mMessage;
+        protected string mMessage;
         Texture2D mGradientTexture;
         Rectangle mBackgroundRectangle;
         Vector2 mTextPosition;

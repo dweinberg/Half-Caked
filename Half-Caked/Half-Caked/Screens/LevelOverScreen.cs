@@ -9,7 +9,8 @@ namespace Half_Caked
     class LevelOverScreen : MessageBoxScreen
     {
         Level mLevel;
-        public LevelOverScreen(Level level)
+
+        public LevelOverScreen(Level level, HalfCakedGame game)
             : base("Level Complete!", new string[] {"Next Level", "Play Again", "Exit"}, 0)
         {
             IsPopup = true;
@@ -19,13 +20,34 @@ namespace Half_Caked
             Buttons[0].Pressed += NextLevelMenuEntrySelected;
             Buttons[1].Pressed += ResetMenuEntrySelected;
             Buttons[2].Pressed += QuitGameMenuEntrySelected;
+
+            Profile prof = game.CurrentProfile;
+            String scoreString = "\n";
+
+            if (prof.CurrentLevel < Level.MAX_LEVELS - 1 && prof.CurrentLevel == level.LevelIdentifier)
+                prof.CurrentLevel++;
+
+            if (prof.LevelStatistics[mLevel.LevelIdentifier] == null ||
+                prof.LevelStatistics[mLevel.LevelIdentifier].Score > level.LevelStatistics.Score)
+            {
+                scoreString += "Congratulations! You set a new high score.\n";
+                prof.LevelStatistics[mLevel.LevelIdentifier] = level.LevelStatistics;
+                Profile.SaveProfile(prof, "default.sav", game.Device);
+            }
+            else
+            {
+                scoreString += "High Score: " + prof.LevelStatistics[mLevel.LevelIdentifier].Score + "\n";
+            }
+            scoreString += "Your Score: " + level.LevelStatistics.Score + "\n";
+
+            mMessage += scoreString;
+
         }
 
         public override void LoadContent()
         {
-            CreateContentDimensions();
             base.LoadContent();
-            if (mLevel.LevelIdentifier + 1 > Level.MAX_LEVELS)
+            if (mLevel.LevelIdentifier + 1 >= Level.MAX_LEVELS)
             {
                 Buttons[0].State = Button.ButtonState.Inactive;
                 Buttons[1].State = Button.ButtonState.Selected;
@@ -49,33 +71,7 @@ namespace Half_Caked
             mLevel.Reset();
             ExitScreen();
         }
-
-        private void CreateContentDimensions()
-        {
-            Statistics[] scores = Statistics.LoadHighScores(mLevel.LevelIdentifier);
-
-            int insert = -1;
-            for (int i = 0; i < scores.Length; i++)
-                if (insert >= 0)
-                    scores[i - 1] = scores[i];
-                else if (scores[i] == null)
-                {
-                    insert = i;
-                    break;
-                }
-                else if (scores[i].TimeElapsed < mLevel.LevelStatistics.TimeElapsed)
-                    insert = i;
-
-            if (insert >= 0)
-            {
-                scores[insert] = mLevel.LevelStatistics;
-                Statistics.SaveHighScores(mLevel.LevelIdentifier, scores);
-            }
-            
-            this.mContentHeightPadding = 200;
-
-        }
-
+        
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);

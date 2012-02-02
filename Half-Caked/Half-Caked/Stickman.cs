@@ -35,7 +35,7 @@ namespace Half_Caked
         const int MOVE_RIGHT = 1;
         const float MASS = 80.0f;
         const float STATIC_ACCEL_GND = MASS  * .05f;
-        const float DYNAMIC_ACCEL_AIR = MASS * .10f;
+        const float DYNAMIC_ACCEL_AIR = MASS * .20f;
         const float STATIC_ACCEL_AIR = MASS * .0025f;
         const float ARM_LENGTH = 37;
         #endregion
@@ -332,19 +332,21 @@ namespace Half_Caked
                 else
                 {
                     Acceleration.X = DYNAMIC_ACCEL_AIR * (Math.Abs(Velocity.X) <= STATIC_ACCEL_AIR ? 0 : 1) * (-Math.Sign(Velocity.X));
-
+                }
                     if (aCurrentKeyboardState.IsKeyDown(Keys.A) == true || aCurrentKeyboardState.IsKeyDown(Keys.Left) == true)
                     {
-                        Acceleration.X += DYNAMIC_ACCEL_AIR * MOVE_LEFT / 4;
+                        //Acceleration.X += DYNAMIC_ACCEL_AIR * MOVE_LEFT / 4;
+                        Velocity.X = Math.Min(Velocity.X, DEFAULT_SPEED / 2f * MOVE_LEFT * (mIsDucking ? .5f : 1));
                     }
                     else if (aCurrentKeyboardState.IsKeyDown(Keys.Right) == true || aCurrentKeyboardState.IsKeyDown(Keys.D) == true)
                     {
-                        Acceleration.X += DYNAMIC_ACCEL_AIR * MOVE_RIGHT / 4;
+                        //Acceleration.X += DYNAMIC_ACCEL_AIR * MOVE_RIGHT / 4;
+                        Velocity.X = Math.Max(Velocity.X, DEFAULT_SPEED / 2f * MOVE_RIGHT * (mIsDucking ? .5f : 1));
                     }
 
-                    if (mIsDucking)
-                        Acceleration.X *= .75f;
-                }
+                    //if (mIsDucking)
+                    //    Acceleration.X *= .75f;
+                //}
             }
         }
 

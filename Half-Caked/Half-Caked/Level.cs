@@ -17,10 +17,10 @@ namespace Half_Caked
     public class Level : Sprite
     {
         #region Constants
-        public static int GAME_WIDTH = 1000;
-        public static int GAME_HEIGHT = 700;
+        public static int GAME_WIDTH = 1024;
+        public static int GAME_HEIGHT = 768;
         public static float METERS_TO_UNITS = 20;
-        public static int MAX_LEVELS = 1;
+        public static int MAX_LEVELS = 2;
         #endregion
 
         #region Fields
@@ -219,45 +219,5 @@ namespace Half_Caked
             }
         }
         #endregion
-    }
-
-    [Serializable]
-    public class Statistics
-    {
-        public String PlayerName;
-        public double TimeElapsed;
-        public int Deaths;
-        public int Score;
-
-        public static void SaveHighScores(int levelIdentifier, Statistics[] scores)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Statistics[]));
-            FileStream fs = new FileStream(@"Content\HighScores\Level" + levelIdentifier + ".xml", FileMode.Create);
-            TextWriter textWriter = new StreamWriter(fs);
-            serializer.Serialize(textWriter, scores);
-            textWriter.Close();
-            fs.Close();
-        }
-
-        public static Statistics[] LoadHighScores(int levelIdentifier)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Statistics[]));
-
-            try
-            {
-                FileStream fs = new FileStream(@"Content\HighScores\Level" + levelIdentifier + ".xml", FileMode.Open);
-                XmlReader reader = new XmlTextReader(fs);
-
-                Statistics[] sts = (Statistics[])serializer.Deserialize(reader);
-
-                fs.Close();
-                reader.Close();
-                return sts;
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 }

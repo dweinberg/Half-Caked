@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Actors.cs" />
     <Compile Include="Checkpoint.cs" />
+    <Compile Include="Profile.cs" />
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="Level.cs" />
@@ -118,6 +119,8 @@
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="ScreenManager\Button.cs" />
     <Compile Include="Screens\BackgroundScreen.cs" />
+    <Compile Include="Screens\LevelSelectionScreen.cs" />
+    <Compile Include="Screens\ProfileSelectionScreen.cs" />
     <Compile Include="Screens\LevelOverScreen.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
     <Compile Include="Screens\LoadingScreen.cs" />
@@ -139,13 +142,6 @@
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Half-Cake%27d Content\Half-Caked Content.contentproj">
-      <Name>Half-Caked Content %28Content%29</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
-      <Project>{0D2F41CE-28A0-4DAD-9271-842F0ED5095B}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -173,6 +169,13 @@
       <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Half-Caked Content\Half-Caked Content.contentproj">
+      <Project>{0D2F41CE-28A0-4DAD-9271-842F0ED5095B}</Project>
+      <Name>Half-Caked Content %28Content%29</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

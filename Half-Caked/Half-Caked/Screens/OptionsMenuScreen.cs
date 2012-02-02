@@ -22,26 +22,14 @@ namespace Half_Caked
     {
         #region Fields
 
-        MenuEntry ungulateMenuEntry;
-        MenuEntry languageMenuEntry;
-        MenuEntry frobnicateMenuEntry;
-        MenuEntry elfMenuEntry;
+        MenuEntry profileMenuEntry;
+        MenuEntry resolutionMenuEntry;
+        MenuEntry soundMenuEntry;
 
-        enum Ungulate
-        {
-            BactrianCamel,
-            Dromedary,
-            Llama,
-        }
+        static string[] resolution = { "1280 x 1024", "1024 x 768", "1280 x 720" };
+        static int currentResolution = 0;
 
-        static Ungulate currentUngulate = Ungulate.Dromedary;
-
-        static string[] languages = { "C#", "French", "Deoxyribonucleic acid" };
-        static int currentLanguage = 0;
-
-        static bool frobnicate = true;
-
-        static int elf = 23;
+        static bool soundEnabled = true;
 
         #endregion
 
@@ -51,31 +39,29 @@ namespace Half_Caked
         /// <summary>
         /// Constructor.
         /// </summary>
-        public OptionsMenuScreen()
+        public OptionsMenuScreen(string currentProfileName)
             : base("Options")
         {
             // Create our menu entries.
-            ungulateMenuEntry = new MenuEntry(string.Empty);
-            languageMenuEntry = new MenuEntry(string.Empty);
-            frobnicateMenuEntry = new MenuEntry(string.Empty);
-            elfMenuEntry = new MenuEntry(string.Empty);
+            profileMenuEntry = new MenuEntry(string.Empty);
+            resolutionMenuEntry = new MenuEntry(string.Empty);
+            soundMenuEntry = new MenuEntry(string.Empty);
 
+            profileMenuEntry.Text = "Current Profile: " + currentProfileName;
             SetMenuEntryText();
 
             MenuEntry backMenuEntry = new MenuEntry("Back");
 
             // Hook up menu event handlers.
-            ungulateMenuEntry.Selected += UngulateMenuEntrySelected;
-            languageMenuEntry.Selected += LanguageMenuEntrySelected;
-            frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
-            elfMenuEntry.Selected += ElfMenuEntrySelected;
+            profileMenuEntry.Selected += ProfileMenuEntrySelected;
+            resolutionMenuEntry.Selected += ResolutionMenuEntrySelected;
+            soundMenuEntry.Selected += SoundMenuEntrySelected;
             backMenuEntry.Selected += OnCancel;
             
             // Add entries to the menu.
-            MenuEntries.Add(ungulateMenuEntry);
-            MenuEntries.Add(languageMenuEntry);
-            MenuEntries.Add(frobnicateMenuEntry);
-            MenuEntries.Add(elfMenuEntry);
+            MenuEntries.Add(profileMenuEntry);
+            MenuEntries.Add(resolutionMenuEntry);
+            MenuEntries.Add(soundMenuEntry);
             MenuEntries.Add(backMenuEntry);
         }
 
@@ -85,38 +71,38 @@ namespace Half_Caked
         /// </summary>
         void SetMenuEntryText()
         {
-            ungulateMenuEntry.Text = "Preferred ungulate: " + currentUngulate;
-            languageMenuEntry.Text = "Language: " + languages[currentLanguage];
-            frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
-            elfMenuEntry.Text = "elf: " + elf;
+            resolutionMenuEntry.Text = "Resolution: " + resolution[currentResolution];
+            soundMenuEntry.Text = "Sound: " + (soundEnabled ? "on" : "off");
         }
 
+        void SetProfileNameText(object sender, PlayerIndexEventArgs e)
+        {
+            profileMenuEntry.Text = "Current Profile: " + (ScreenManager.Game as HalfCakedGame).CurrentProfile.Name;
+        }
 
         #endregion
 
         #region Handle Input
 
-
         /// <summary>
         /// Event handler for when the Ungulate menu entry is selected.
         /// </summary>
-        void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void ProfileMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentUngulate++;
+            var scrn = new ProfileSelectionScreen((ScreenManager.Game as HalfCakedGame).Device);
+            for(int i = 0; i < scrn.Buttons.Count; i++)
+                scrn.Buttons[i].Pressed += SetProfileNameText;
 
-            if (currentUngulate > Ungulate.Llama)
-                currentUngulate = 0;
-
-            SetMenuEntryText();
+            ScreenManager.AddScreen(scrn, null);
         }
 
 
         /// <summary>
         /// Event handler for when the Language menu entry is selected.
         /// </summary>
-        void LanguageMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void ResolutionMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentLanguage = (currentLanguage + 1) % languages.Length;
+            currentResolution = (currentResolution + 1) % resolution.Length;
 
             SetMenuEntryText();
         }
@@ -125,25 +111,13 @@ namespace Half_Caked
         /// <summary>
         /// Event handler for when the Frobnicate menu entry is selected.
         /// </summary>
-        void FrobnicateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void SoundMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            frobnicate = !frobnicate;
+            soundEnabled = !soundEnabled;
 
             SetMenuEntryText();
         }
-
-
-        /// <summary>
-        /// Event handler for when the Elf menu entry is selected.
-        /// </summary>
-        void ElfMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            elf++;
-
-            SetMenuEntryText();
-        }
-
-
+        
         #endregion
     }
 }
