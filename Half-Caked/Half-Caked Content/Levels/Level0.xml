@@ -19,7 +19,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.8</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -33,7 +32,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -47,7 +45,6 @@
           <Y>473</Y>
         </Location>
       </Dimensions>
-      <Friction>0.8</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -61,7 +58,6 @@
           <Y>473</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -75,7 +71,6 @@
           <Y>473</Y>
         </Location>
       </Dimensions>
-      <Friction>0.2</Friction>
       <Type>Amplifies</Type>
     </Tile>
     <Tile>
@@ -89,7 +84,6 @@
           <Y>1136</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -103,7 +97,6 @@
           <Y>1136</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -117,7 +110,6 @@
           <Y>1136</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -131,7 +123,6 @@
           <Y>1136</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -145,7 +136,6 @@
           <Y>966</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -159,7 +149,6 @@
           <Y>966</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -173,7 +162,6 @@
           <Y>1079</Y>
         </Location>
       </Dimensions>
-      <Friction>0.05</Friction>
       <Type>Reflects</Type>
     </Tile>
     <Tile>
@@ -187,7 +175,6 @@
           <Y>915</Y>
         </Location>
       </Dimensions>
-      <Friction>0.8</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -201,7 +188,6 @@
           <Y>1498</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Death</Type>
     </Tile>
     <Tile>
@@ -215,7 +201,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -229,7 +214,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -243,13 +227,12 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
   </Tiles>
   <Obstacles>
     <Obstacle xsi:type="Switch">
-      <AssetName>Switch</AssetName>
+      <AssetName>Sprites\Switch</AssetName>
       <InitialPosition>
         <X>1980</X>
         <Y>815</Y>
@@ -260,22 +243,22 @@
           <Value>1</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>16b21e16-d5d4-4d41-a1f1-6668312829cc</Guid>
+      <Guid>403bc8b9-c600-45d0-89fa-b32575feb242</Guid>
       <InitialState>2</InitialState>
     </Obstacle>
     <Obstacle xsi:type="Platform">
-      <AssetName>Platform</AssetName>
+      <AssetName>Sprites\Platform</AssetName>
       <InitialPosition>
         <X>1435</X>
         <Y>1078</Y>
       </InitialPosition>
       <Actions>
         <KeyValuePairOfGuidInt32>
-          <Key>16b21e16-d5d4-4d41-a1f1-6668312829cc</Key>
+          <Key>403bc8b9-c600-45d0-89fa-b32575feb242</Key>
           <Value>0</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>077d54d4-2108-44f5-9b25-c9b28d4a5483</Guid>
+      <Guid>39ed2c04-b7e5-4687-939f-1377eed13e7f</Guid>
       <InitialState>1</InitialState>
       <Path>
         <Vector2>
@@ -298,24 +281,23 @@
       <Speed>50</Speed>
     </Obstacle>
     <Obstacle xsi:type="Door">
-      <AssetName>Door</AssetName>
+      <AssetName>Sprites\Door</AssetName>
       <InitialPosition>
         <X>778</X>
         <Y>282</Y>
       </InitialPosition>
       <Actions>
         <KeyValuePairOfGuidInt32>
-          <Key>16b21e16-d5d4-4d41-a1f1-6668312829cc</Key>
+          <Key>403bc8b9-c600-45d0-89fa-b32575feb242</Key>
           <Value>1</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>06f23372-d520-418d-bb9f-21ebe6086e72</Guid>
+      <Guid>e1a6643e-c90a-48e7-81aa-2d22557648c1</Guid>
       <InitialState>0</InitialState>
     </Obstacle>
   </Obstacles>
   <Actors />
-  <Portals />
-  <mCheckpoints>
+  <Checkpoints>
     <Checkpoint>
       <Location>
         <X>270</X>
@@ -386,5 +368,5 @@
         <Y>473</Y>
       </Bound>
     </Checkpoint>
-  </mCheckpoints>
+  </Checkpoints>
 </Level>

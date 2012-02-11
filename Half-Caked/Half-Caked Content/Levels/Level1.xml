@@ -19,7 +19,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -33,7 +32,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -47,7 +45,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Death</Type>
     </Tile>
     <Tile>
@@ -61,7 +58,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Amplifies</Type>
     </Tile>
     <Tile>
@@ -75,7 +71,6 @@
           <Y>490</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -89,7 +84,6 @@
           <Y>664</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -103,7 +97,6 @@
           <Y>661</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -117,7 +110,6 @@
           <Y>603</Y>
         </Location>
       </Dimensions>
-      <Friction>0.05</Friction>
       <Type>Reflects</Type>
     </Tile>
     <Tile>
@@ -131,7 +123,6 @@
           <Y>490</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -145,7 +136,6 @@
           <Y>664</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -159,7 +149,6 @@
           <Y>661</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Normal</Type>
     </Tile>
     <Tile>
@@ -173,7 +162,6 @@
           <Y>1022</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Death</Type>
     </Tile>
     <Tile>
@@ -187,7 +175,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -201,7 +188,6 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
     <Tile>
@@ -215,14 +201,12 @@
           <Y>0</Y>
         </Location>
       </Dimensions>
-      <Friction>0.4</Friction>
       <Type>Absorbs</Type>
     </Tile>
   </Tiles>
   <Obstacles />
   <Actors />
-  <Portals />
-  <mCheckpoints>
+  <Checkpoints>
     <Checkpoint>
       <Location>
         <X>270</X>
@@ -265,5 +249,5 @@
         <Y>602</Y>
       </Bound>
     </Checkpoint>
-  </mCheckpoints>
+  </Checkpoints>
 </Level>

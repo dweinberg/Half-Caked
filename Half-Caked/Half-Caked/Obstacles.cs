@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Half_Caked
 {
@@ -107,7 +108,7 @@ namespace Half_Caked
         public Platform()
         {
             Scale = .1f;
-            AssetName = "Platform";
+            AssetName = "Sprites\\Platform";
 
             Type = Surface.Normal;
             Friction = .60f;
@@ -123,7 +124,7 @@ namespace Half_Caked
             InitialState = (int)state;
 
             Scale = .1f;
-            AssetName = "Platform";
+            AssetName = "Sprites\\Platform";
 
             Type = Surface.Normal;
             Friction = .60f;
@@ -195,10 +196,14 @@ namespace Half_Caked
             Active
         }
 
+        #region Fields
+        private SoundEffect mTriggerSound;
+        #endregion
+
         #region Initialization
         public Switch()
         {
-            AssetName = "Switch";
+            AssetName = "Sprites\\Switch";
             Type = Surface.Absorbs;
             Friction = .60f;
         }
@@ -211,7 +216,7 @@ namespace Half_Caked
 
             UpdateSource(state);
 
-            AssetName = "Switch";
+            AssetName = "Sprites\\Switch";
             Type = Surface.Absorbs;
             Friction = .60f;
         }
@@ -220,6 +225,7 @@ namespace Half_Caked
         {
             base.LoadContent(theContentManager, theAssetName);
             UpdateSource((SwitchState)mState);
+            mTriggerSound = theContentManager.Load<SoundEffect>("Sounds\\Switch");
         }
         #endregion
 
@@ -234,11 +240,14 @@ namespace Half_Caked
         {
             base.React(caller, level);
             UpdateSource((SwitchState)mState);
-                
+
             if ((SwitchState)mState == SwitchState.Pressed)
+            {
+                level.PlaySoundEffect(mTriggerSound);
                 foreach (Obstacle obs in level.Obstacles)
-                    if(obs.Guid != Guid)
+                    if (obs.Guid != Guid)
                         obs.React(this.Guid, level);
+            }
         }
         #endregion
 
@@ -279,7 +288,7 @@ namespace Half_Caked
         #region Initialization
         public Door() 
         { 
-            AssetName = "Door";
+            AssetName = "Sprites\\Door";
 
             Type = Surface.Absorbs;
             Friction = .60f;
@@ -291,7 +300,7 @@ namespace Half_Caked
             InitialPosition = pos;
             InitialState = (int)state;
 
-            AssetName = "Door";
+            AssetName = "Sprites\\Door";
             Type = Surface.Absorbs;
             Friction = .60f;
         }

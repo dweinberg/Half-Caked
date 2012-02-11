@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+/* SOUNDS OBTAINED FROM MICROSOFT SOUNDLAB, PlATFORMER STARTER KIT AND KEVIN MACLEOD */
+
 namespace Half_Caked
 {
     public class HalfCakedGame : Microsoft.Xna.Framework.Game
@@ -60,8 +62,8 @@ namespace Half_Caked
                 CurrentProfile = new Profile();//screenManager.AddScreen(new ProfileSelectionScreen(Device), null);
 
             UpdateGraphics();
-            //LevelCreator.CreateAndSaveLevel(0);
-            //LevelCreator.CreateAndSaveLevel(1);
+            LevelCreator.CreateAndSaveLevel(0);
+            LevelCreator.CreateAndSaveLevel(1);
         }
 
         /// <summary>

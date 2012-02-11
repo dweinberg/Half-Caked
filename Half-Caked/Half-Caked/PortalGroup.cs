@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Half_Caked
 {
@@ -31,6 +32,7 @@ namespace Half_Caked
         PortalState mState = PortalState.Closed;
         List<Actor> mInPortal1 = new List<Actor>();
         List<Actor> mInPortal2 = new List<Actor>();
+        SoundEffect mOpenPortalEffect;
         #endregion
 
         #region Initialization
@@ -46,8 +48,9 @@ namespace Half_Caked
 
         public void LoadContent(ContentManager theContentManager)
         {
-            Portal1.LoadContent(theContentManager, "Portal1");
-            Portal2.LoadContent(theContentManager, "Portal2");
+            Portal1.LoadContent(theContentManager, "Sprites\\Portal1");
+            Portal2.LoadContent(theContentManager, "Sprites\\Portal2");
+            mOpenPortalEffect  = theContentManager.Load<SoundEffect>("Sounds\\PortalOpen");
         }
         #endregion
 
@@ -62,7 +65,7 @@ namespace Half_Caked
             return mState != PortalState.InUse;
         }
 
-        public void Open(Vector2 position, Orientation orientation, int portalNumber, Vector2 movement)
+        public void Open(Vector2 position, Orientation orientation, int portalNumber, Vector2 movement, Level lvl)
         {
             Sprite chosenOne = portalNumber == 1 ? Portal2 : Portal1;
 
@@ -80,7 +83,9 @@ namespace Half_Caked
                     return;
                 }
                 mState = PortalState.Open;
-            }
+                lvl.PlaySoundEffect(mOpenPortalEffect);
+            }            
+
         }
 
         public void Close(int portalNumber)

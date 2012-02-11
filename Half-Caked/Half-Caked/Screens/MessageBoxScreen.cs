@@ -87,7 +87,7 @@ namespace Half_Caked
         {
             ContentManager content = ScreenManager.Game.Content;
 
-            mGradientTexture = content.Load<Texture2D>("gradient");
+            mGradientTexture = content.Load<Texture2D>("UI\\gradient");
 
             foreach(Button btn in Buttons)
                 btn.LoadContent(ScreenManager.Font, content);

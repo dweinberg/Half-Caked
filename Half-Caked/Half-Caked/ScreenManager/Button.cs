@@ -135,7 +135,7 @@ namespace Half_Caked
         public void LoadContent(SpriteFont font, ContentManager contentManager)
         {
             mFont = font;
-            mBackground = contentManager.Load<Texture2D>("Buttons");
+            mBackground = contentManager.Load<Texture2D>("UI\\Buttons");
 
             Vector2 mTextSize = mFont.MeasureString(Text);
             mRectangle.Width  += (int)mTextSize.X;

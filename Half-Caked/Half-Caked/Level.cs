@@ -7,10 +7,12 @@ using System.Xml.Serialization;
 using System.IO;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Half_Caked
 {
@@ -29,26 +31,28 @@ namespace Half_Caked
         public Statistics LevelStatistics;
 
         public List<Tile> Tiles;
-
         public List<Obstacle> Obstacles;
         public List<Actor> Actors;
-        public PortalGroup Portals;
-
-        protected Vector2 mCenterVector;
-
         public List<Checkpoint> Checkpoints;
-        protected int mCheckpointIndex = 1;
 
-        protected List<TextEffect> mTextEffects;
-        protected AudioSettings mAudio;
-
-        protected Character mCharacter;
-        protected Sprite mBackground;
-
-        protected SpriteFont mGameFont;
-        protected bool mGameOver = false;
+        [XmlIgnore]
+        public PortalGroup Portals;
+        [XmlIgnore]
+        public Character Player;
 
         private Vector2 mDimensions;
+        private Vector2 mCenterVector;
+        private int mCheckpointIndex = 1;
+
+        private List<TextEffect> mTextEffects;
+        private AudioSettings mAudio;
+        private Song mExitReached;
+        private Song mBackgroundMusic;
+        private SoundEffect mCheckpointSound;
+
+        private Sprite mBackground;        
+        private SpriteFont mGameFont;
+
         #endregion
 
         #region Initialization
@@ -67,18 +71,25 @@ namespace Half_Caked
 
         public virtual void LoadContent(ContentManager theContentManager, Profile activeProfile)
         {
+            AssetName = "Levels\\" + AssetName;
             base.LoadContent(theContentManager, AssetName);
             mBackground.LoadContent(theContentManager, AssetName + "b");
 
             mDimensions = activeProfile.Graphics.Resolution;
             mCenterVector = new Vector2(mDimensions.X / 2 - 100, mDimensions.Y * 3 / 4 - 100);
+
             mAudio = activeProfile.Audio;
+            SoundEffect.MasterVolume = mAudio.MasterVolume / 100f;
+            MediaPlayer.Volume = mAudio.MasterVolume * mAudio.MusicVolume / 10000f;
+            mExitReached = theContentManager.Load<Song>("Sounds\\ExitReached");
+            mBackgroundMusic = theContentManager.Load<Song>("Sounds\\Level");
+            mCheckpointSound = theContentManager.Load<SoundEffect>("Sounds\\Checkpoint");
 
             Portals.LoadContent(theContentManager);
             
-            mCharacter = new Character();
-            mCharacter.LoadContent(theContentManager);
-            mCharacter.Position = mCharacter.InitialPosition = Checkpoints[0].Location;
+            Player = new Character();
+            Player.LoadContent(theContentManager);
+            Player.Position = Player.InitialPosition = Checkpoints[0].Location;
 
             foreach (Obstacle spr in Obstacles)
                 spr.LoadContent(theContentManager, spr.AssetName);
@@ -86,13 +97,16 @@ namespace Half_Caked
             foreach (Actor spr in Actors)
                 spr.LoadContent(theContentManager, spr.AssetName);
 
-            mGameFont = theContentManager.Load<SpriteFont>("gamefont");
+            mGameFont = theContentManager.Load<SpriteFont>("Fonts\\gamefont");
         }
         #endregion
 
         #region Update and Draw
         public void Update(GameTime theGameTime, InputState inputState)
         {
+            if (MediaPlayer.State == MediaState.Stopped)
+                MediaPlayer.Play(mBackgroundMusic);
+
             KeyboardState aCurrentKeyboardState = Keyboard.GetState();
             MouseState aCurrentMouseState = Mouse.GetState();
             LevelStatistics.TimeElapsed += theGameTime.ElapsedGameTime.TotalSeconds;
@@ -102,7 +116,7 @@ namespace Half_Caked
             foreach (Obstacle spr in Obstacles)
                 spr.Update(theGameTime);
 
-            mCharacter.Update(theGameTime, this, inputState);
+            Player.Update(theGameTime, this, inputState);
 
             foreach (Actor spr in Actors)
             {
@@ -118,13 +132,13 @@ namespace Half_Caked
 
             Portals.Update(theGameTime);
             
-            Position = mCenterVector - mCharacter.Position;
+            Position = mCenterVector - Player.Position;
             Position = new Vector2(MathHelper.Clamp(Position.X, mDimensions.X - Size.Width, 0), MathHelper.Clamp(Position.Y, mDimensions.Y - Size.Height, 0));
 
             mBackground.Position = Position;
             
-            if(mCharacter.IsGrounded())
-                while (Checkpoints[mCheckpointIndex].InBounds(mCharacter.Position))
+            if(Player.IsGrounded())
+                while (Checkpoints[mCheckpointIndex].InBounds(Player.Position))
                 {
                     if (++mCheckpointIndex >= Checkpoints.Count)
                     {
@@ -132,7 +146,8 @@ namespace Half_Caked
                     }
                     else
                     {
-                        mTextEffects.Add(new CheckpointNotification(mCharacter.Position+Position));
+                        mTextEffects.Add(new CheckpointNotification(Player.Position+Position));
+                        PlaySoundEffect(mCheckpointSound);
                     }
                 }
 
@@ -147,7 +162,7 @@ namespace Half_Caked
             foreach (Sprite spr in Actors)
                 spr.Draw(theSpriteBatch, Position);
 
-            mCharacter.Draw(theSpriteBatch, Position);
+            Player.Draw(theSpriteBatch, Position);
             Portals.Draw(theSpriteBatch, Position);
             
             base.Draw(theSpriteBatch);
@@ -160,11 +175,6 @@ namespace Half_Caked
         #endregion
 
         #region Public Methods
-        public bool IsOver()
-        {
-            return mGameOver;
-        }
-
         public override void Reset()
         {
             base.Reset();
@@ -176,7 +186,7 @@ namespace Half_Caked
             foreach (Obstacle spr in Obstacles)
                 spr.Reset();
 
-            mCharacter.Reset();
+            Player.Reset();
 
             foreach (Actor spr in Actors)
                 spr.Reset();
@@ -188,15 +198,20 @@ namespace Half_Caked
         public void PlayerDeath()
         {
             LevelStatistics.Deaths++;
-            mCharacter.DeathReset();
-            mCharacter.Position = Checkpoints[mCheckpointIndex-1].Location;
+            Player.DeathReset();
+            Player.Position = Checkpoints[mCheckpointIndex-1].Location;
+        }
+
+        public void PlaySoundEffect(SoundEffect sfx)
+        {
+            sfx.Play(mAudio.SoundEffectsVolume / 100f, 0f, 0f);
         }
         #endregion
 
         #region Private Methods
         private void GameOver()
         {
-            mGameOver = true;
+            MediaPlayer.Play(mExitReached);
             throw new Exception("LevelComplete");
         }
         #endregion

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
@@ -27,7 +28,7 @@ namespace Half_Caked
         public static Guid CharacterGuid =
             new Guid("05159D8A-B739-4AA4-9F6D-3FF5CB29572D");
 
-        const string ASSETNAME= "Stickman";
+        const string ASSETNAME= "Sprites\\Stickman";
         const int DEFAULT_SPEED = 160;
         const int MOVE_UP = -1;
         const int MOVE_DOWN = 1;
@@ -49,7 +50,9 @@ namespace Half_Caked
 
         bool mIsDucking = false, mForcedDucking;
         float mCurrentFriction;
-        Rectangle[] mCollisions = new Rectangle[5];      
+        Rectangle[] mCollisions = new Rectangle[5];
+
+        SoundEffect mJumpEffect, mDeathEffect, mLandingEffect;
         #endregion
 
         #region Initialization
@@ -67,6 +70,10 @@ namespace Half_Caked
             mOrbs[1] = new PortalGunBullet();
             mOrbs[1].LoadContent(this.mContentManager, 1);
 
+            mJumpEffect = theContentManager.Load<SoundEffect>("Sounds\\PlayerJump");
+            mDeathEffect = theContentManager.Load<SoundEffect>("Sounds\\PlayerKilled");
+            mLandingEffect = theContentManager.Load<SoundEffect>("Sounds\\PlayerLanding");
+
             Center = new Vector2(Size.Width / 2, Size.Height / 2);
         }
         #endregion
@@ -77,9 +84,14 @@ namespace Half_Caked
         {
             Acceleration = Vector2.Zero;
 
+            var curstate = mCurrentState;
             CheckCollisions(level, inputState.IsInteracting(null));
+            if (curstate == State.Air && (mCurrentState == State.Ground || mCurrentState == State.Platform))
+                level.PlaySoundEffect(mLandingEffect);
+
             UpdateMovement(inputState);
-            UpdateJump(inputState);
+            if (UpdateJump(inputState))
+                level.PlaySoundEffect(mJumpEffect);
             UpdateDuck(inputState);
 
             Acceleration.Y = (mCurrentState == State.Air || mCurrentState == State.GravityPortal  || mCurrentState == State.Portal ? 1 : 0) * level.Gravity * Level.METERS_TO_UNITS;
@@ -119,7 +131,7 @@ namespace Half_Caked
                 {
                     if (HandleStandardCollision(result, obs.CollisionSurface, obs.Contact(result), obs.Friction * level.Gravity))
                     {
-                        level.PlayerDeath();
+                        Die(level);
                         return;
                     }
                     FrameVelocity = obs.Velocity;
@@ -135,7 +147,7 @@ namespace Half_Caked
                 {
                     if (HandleStandardCollision(result, tile.Dimensions, tile.Type, tile.Friction * level.Gravity))
                     {
-                        level.PlayerDeath();
+                        Die(level);
                         return;
                     }
                 }
@@ -147,7 +159,7 @@ namespace Half_Caked
                 Duck();
                 if (mCollisions[(int)Orientation.Down].Intersects(this.CollisionSurface) &&
                     mCollisions[(int)Orientation.Up].Intersects(this.CollisionSurface))
-                    level.PlayerDeath();
+                    Die(level);
             }
             else
                 mForcedDucking = false;
@@ -342,7 +354,7 @@ namespace Half_Caked
             }
         }
 
-        private void UpdateJump(InputState inputState)
+        private bool UpdateJump(InputState inputState)
         {
             if ((mCurrentState == State.Ground || mCurrentState == State.Platform || mCurrentState == State.Portal) && Velocity.Y == 0)
             {
@@ -350,8 +362,10 @@ namespace Half_Caked
                 {
                     mCurrentState = State.Air;
                     Velocity.Y = -DEFAULT_SPEED;
+                    return true;
                 }
             }
+            return false;
         }
 
         private void UpdateDuck(InputState inputState)
@@ -397,7 +411,7 @@ namespace Half_Caked
             }
             else if (inputState.IsFiringPortal1(null))
             {
-                ShootProjectile(0, inputState.CurrentMouseState);
+                ShootProjectile(0, inputState.CurrentMouseState, level);
                 mOrbs[0].CheckCollisions(level);
                 level.Portals.Close(0);
             }
@@ -409,25 +423,28 @@ namespace Half_Caked
             }
             else if (inputState.IsFiringPortal2(null))
             {
-                ShootProjectile(1, inputState.CurrentMouseState);
+                ShootProjectile(1, inputState.CurrentMouseState, level);
                 mOrbs[1].CheckCollisions(level);
                 level.Portals.Close(1);
             }
         }
 
-        private void ShootProjectile(int type, MouseState aCurrentMouseState)
+        private void ShootProjectile(int type, MouseState aCurrentMouseState, Level level)
         {
             Vector2 dir = new Vector2((float)Math.Cos(mGunhand.Angle), (float)Math.Sin(mGunhand.Angle));
 
             mOrbs[type].Fire(mGunhand.Position + ARM_LENGTH * dir, 
                             dir,
-                            Vector2.Zero);
+                            Vector2.Zero,
+                            level);
         }
         
         private void Die(Level level)
         {
+            level.PlaySoundEffect(mDeathEffect);
             level.PlayerDeath();
         }
+
         #endregion
     }
 
@@ -445,7 +462,7 @@ namespace Half_Caked
 
         public void LoadContent(ContentManager theContentManager)
         {
-            base.LoadContent(theContentManager, "Gunarm");
+            base.LoadContent(theContentManager, "Sprites\\Gunarm");
             Source = new Rectangle(0, 0, 37, 5);
             Scale = 1.0f;
             Center = new Vector2(0, 3);

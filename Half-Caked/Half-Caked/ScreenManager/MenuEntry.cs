@@ -92,7 +92,6 @@ namespace Half_Caked
 
         #region Update and Draw
 
-
         /// <summary>
         /// Updates the menu entry.
         /// </summary>

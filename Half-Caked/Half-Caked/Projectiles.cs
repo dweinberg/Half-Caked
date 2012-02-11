@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Half_Caked
 {
@@ -12,11 +13,14 @@ namespace Half_Caked
     {
         #region Fields
         protected float mSpeed = 1000f;
+        protected SoundEffect mFireSound;
         #endregion
-
+        
         #region Public Methods
-        public void Fire(Vector2 startPosition, Vector2 direction, Vector2 acceleration)
+        public void Fire(Vector2 startPosition, Vector2 direction, Vector2 acceleration, Level lvl)
         {
+            if(mFireSound != null)
+                lvl.PlaySoundEffect(mFireSound);
             Position = startPosition;
             Velocity = direction * mSpeed;
             Acceleration = acceleration;
@@ -31,7 +35,14 @@ namespace Half_Caked
                 Visible = false;
                 return;
             }
-            
+
+            if (CollisionSurface.Intersects(level.Player.CollisionSurface))
+            {
+                HandlePlayerCollision(level);
+                if (!Visible)
+                    return;
+            }
+
             foreach (Tile tile in level.Tiles)
             {
                 Rectangle result = Rectangle.Intersect(tile.Dimensions, CollisionSurface);
@@ -66,6 +77,7 @@ namespace Half_Caked
         #region Private Methods
         abstract protected void HandleTileCollision(Tile tile, Rectangle result, Level level);
         abstract protected void HandleObstacleCollision(Obstacle obs, Rectangle result, Level level);
+        abstract protected void HandlePlayerCollision(Level level);
         #endregion
     }
 
@@ -78,7 +90,8 @@ namespace Half_Caked
         #region Initialization
         public void LoadContent(ContentManager theContentManager, int classification)
         {
-            base.LoadContent(theContentManager, "PortalBullets");
+            base.LoadContent(theContentManager, "Sprites\\PortalBullets");
+            mFireSound = theContentManager.Load<SoundEffect>("Sounds\\PortalFire");
             Source = new Rectangle(200 * classification, 0, 200, Source.Height);
             Center = new Vector2(10, 10);
             Scale = 0.1f;
@@ -88,6 +101,8 @@ namespace Half_Caked
         #endregion
 
         #region Private Methods
+        protected override void HandlePlayerCollision(Level level) { /*Do nothing*/ }
+
         protected override void HandleTileCollision(Tile tile, Rectangle result, Level level)
         {
             switch (tile.Type)
@@ -193,7 +208,7 @@ namespace Half_Caked
                 return;
             }
             Velocity = Vector2.Zero;
-            level.Portals.Open(openingPoint, orientation, mPortalNumber, FrameVelocity);
+            level.Portals.Open(openingPoint, orientation, mPortalNumber, FrameVelocity, level);
         }
 
         protected void Reflect(Rectangle result)
@@ -214,12 +229,29 @@ namespace Half_Caked
     
     class EnemyBullet : Projectiles
     {
+        #region Initialization
+        public void LoadContent(ContentManager theContentManager)
+        {
+            base.LoadContent(theContentManager, "Sprites\\EnemyBullet");
+            mFireSound = theContentManager.Load<SoundEffect>("Sound\\EnemyFire");
+            Source = new Rectangle(200, 0, 200, Source.Height);
+            Center = new Vector2(10, 10);
+            Scale = 0.1f;
+            Visible = false;
+        }
+        #endregion
+
         protected override void HandleTileCollision(Tile tile, Rectangle result, Level level)
         {
             
         }
 
         protected override void HandleObstacleCollision(Obstacle obs, Rectangle result, Level level)
+        {
+
+        }
+
+        protected override void HandlePlayerCollision(Level level)
         {
 
         }

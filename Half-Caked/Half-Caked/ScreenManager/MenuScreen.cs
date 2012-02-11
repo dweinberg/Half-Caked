@@ -64,13 +64,13 @@ namespace Half_Caked
 
         #region Handle Input
 
-
         /// <summary>
         /// Responds to user input, changing the selected entry and accepting
         /// or cancelling the menu.
         /// </summary>
         public override void HandleInput(InputState input)
         {
+            var before = selectedEntry;
 
             // Move to the previous menu entry?
             if (input.IsMenuUp(ControllingPlayer))
@@ -103,6 +103,12 @@ namespace Half_Caked
                 }
                 yPosition += menuEntries[i].GetHeight(this);
             } 
+
+            if(selectedEntry != before)
+            {
+                AudioSettings settings = (ScreenManager.Game as HalfCakedGame).CurrentProfile.Audio;
+                EntryFocusChanged.Play(settings.SoundEffectsVolume / 500f, 0f, 0f);
+            }
 
             // Accept or cancel the menu? We pass in our ControllingPlayer, which may
             // either be null (to accept input from any player) or a specific index.

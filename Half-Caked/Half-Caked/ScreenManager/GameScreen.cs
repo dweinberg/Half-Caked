@@ -10,6 +10,7 @@
 #region Using Statements
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 #endregion
 
 namespace Half_Caked
@@ -104,6 +105,7 @@ namespace Half_Caked
             get { return (byte)(255 - TransitionPosition * 255); }
         }
 
+        public SoundEffect EntryFocusChanged;
 
         /// <summary>
         /// Gets the current screen transition state.
@@ -186,7 +188,10 @@ namespace Half_Caked
         /// <summary>
         /// Load graphics content for the screen.
         /// </summary>
-        public virtual void LoadContent() { }
+        public virtual void LoadContent()
+        {
+            EntryFocusChanged = ScreenManager.Game.Content.Load<SoundEffect>("Sounds\\UISelected");
+        }
 
 
         /// <summary>
