@@ -10,6 +10,7 @@
 #region Using Statements
 using System;
 using System.Threading;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,6 +30,7 @@ namespace Half_Caked
 
         ContentManager content;
         Level mLevel;
+        InputState mInputState;
 
         #endregion
 
@@ -54,7 +56,7 @@ namespace Half_Caked
             if (content == null)
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            mLevel.LoadContent(this.content);
+            mLevel.LoadContent(this.content, (ScreenManager.Game as HalfCakedGame).CurrentProfile);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -86,13 +88,12 @@ namespace Half_Caked
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
-            if (IsActive)
+            if (IsActive && mInputState != null)
             {
                 this.ScreenManager.Game.IsMouseVisible = false;
                 try
                 {
-                    mLevel.Update(gameTime);
+                    mLevel.Update(gameTime, mInputState);
                 }
                 catch (Exception E)
                 {
@@ -113,6 +114,7 @@ namespace Half_Caked
             if (input == null)
                 throw new ArgumentNullException("input");
 
+            mInputState = input;
             // Look up inputs for the active player profile.
             int playerIndex = (int)ControllingPlayer.Value;
 
@@ -126,7 +128,7 @@ namespace Half_Caked
             bool gamePadDisconnected = !gamePadState.IsConnected &&
                                        input.GamePadWasConnected[playerIndex];
 
-            if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
+            if (input.IsPausingGame(ControllingPlayer) || gamePadDisconnected)
             {
                 ScreenManager.AddScreen(new PauseMenuScreen(mLevel), ControllingPlayer);
             }

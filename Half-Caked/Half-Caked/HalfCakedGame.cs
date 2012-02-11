@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -25,8 +26,6 @@ namespace Half_Caked
         public HalfCakedGame()
         {
             graphics = new GraphicsDeviceManager(this);      
-            graphics.PreferredBackBufferWidth = Level.GAME_WIDTH;
-            graphics.PreferredBackBufferHeight = Level.GAME_HEIGHT;
 
             Content.RootDirectory = "Content";
 
@@ -58,7 +57,9 @@ namespace Half_Caked
             CurrentProfile = Profile.Load(-1, Device);
 
             if (CurrentProfile == null)
-                screenManager.AddScreen(new ProfileSelectionScreen(Device), null);
+                CurrentProfile = new Profile();//screenManager.AddScreen(new ProfileSelectionScreen(Device), null);
+
+            UpdateGraphics();
             //LevelCreator.CreateAndSaveLevel(0);
             //LevelCreator.CreateAndSaveLevel(1);
         }
@@ -94,6 +95,34 @@ namespace Half_Caked
 
             base.Draw(gameTime);
         }
+        #endregion
+
+        #region Public Methods
+
+        public void UpdateGraphics()
+        {
+            graphics.PreferredBackBufferHeight = (int)CurrentProfile.Graphics.Resolution.Y;
+            graphics.PreferredBackBufferWidth = (int)CurrentProfile.Graphics.Resolution.X;
+
+            Form fm = (Form)Form.FromHandle(this.Window.Handle);
+            graphics.IsFullScreen = false;
+            fm.FormBorderStyle = FormBorderStyle.Fixed3D;
+
+            switch (CurrentProfile.Graphics.PresentationMode)
+            {
+                case GraphicsSettings.WindowType.Fullscreen:
+                    graphics.IsFullScreen = true;
+                    break;
+                case GraphicsSettings.WindowType.WindowNoBorder:
+                    fm.FormBorderStyle = FormBorderStyle.None;
+                    break;
+                default:
+                    break;
+            }
+
+            graphics.ApplyChanges();
+        }
+
         #endregion
     }
 

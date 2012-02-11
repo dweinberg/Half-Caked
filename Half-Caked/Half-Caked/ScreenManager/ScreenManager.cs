@@ -159,6 +159,9 @@ namespace Half_Caked
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
 
+            if ((Game as HalfCakedGame).CurrentProfile != null)
+                input.ControlMap = (Game as HalfCakedGame).CurrentProfile.KeyBindings;
+
             // Loop as long as there are screens waiting to be updated.
             while (screensToUpdate.Count > 0)
             {

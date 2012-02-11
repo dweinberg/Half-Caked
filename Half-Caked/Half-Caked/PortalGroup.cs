@@ -28,9 +28,9 @@ namespace Half_Caked
         [XmlIgnore]
         public Sprite Portal1, Portal2;
         
-        PortalState State = PortalState.Closed;
-        List<Actor> InPortal1 = new List<Actor>();
-        List<Actor> InPortal2 = new List<Actor>();
+        PortalState mState = PortalState.Closed;
+        List<Actor> mInPortal1 = new List<Actor>();
+        List<Actor> mInPortal2 = new List<Actor>();
         #endregion
 
         #region Initialization
@@ -54,12 +54,12 @@ namespace Half_Caked
         #region Public Methods
         public bool IsOpen()
         {
-            return State != PortalState.Closed;
+            return mState != PortalState.Closed;
         }
 
         public bool CanClose()
         {
-            return State != PortalState.InUse;
+            return mState != PortalState.InUse;
         }
 
         public void Open(Vector2 position, Orientation orientation, int portalNumber, Vector2 movement)
@@ -79,7 +79,7 @@ namespace Half_Caked
                     Close(portalNumber);
                     return;
                 }
-                State = PortalState.Open;
+                mState = PortalState.Open;
             }
         }
 
@@ -89,49 +89,49 @@ namespace Half_Caked
             chosenOne.Angle = 0;
 
             chosenOne.Visible = false;
-            State = PortalState.Closed;
+            mState = PortalState.Closed;
         }
 
         public void Reset()
         {
             Portal1.Reset();
             Portal2.Reset();
-            State = PortalState.Closed;
-            InPortal1.Clear();
-            InPortal2.Clear();
+            mState = PortalState.Closed;
+            mInPortal1.Clear();
+            mInPortal2.Clear();
             Portal1.Visible = Portal2.Visible = false;
         }
 
         public void AddSprite(int portalNumber, Actor spr)
         {
-            (portalNumber == 0 ? InPortal1 : InPortal2).Add(spr);
-            State = PortalState.InUse;
+            (portalNumber == 0 ? mInPortal1 : mInPortal2).Add(spr);
+            mState = PortalState.InUse;
         }
 
         public void ClearSprites()
         {
-            InPortal1.Clear();
-            InPortal2.Clear();
+            mInPortal1.Clear();
+            mInPortal2.Clear();
         }
         #endregion
 
         #region Draw and Update
         public void Update(GameTime theGameTime)
         {            
-            if (InPortal1.Count + InPortal2.Count > 0)
-                State = PortalState.InUse;
-            else if(State == PortalState.InUse)
-                State = PortalState.Open;
+            if (mInPortal1.Count + mInPortal2.Count > 0)
+                mState = PortalState.InUse;
+            else if(mState == PortalState.InUse)
+                mState = PortalState.Open;
 
             Portal1.Update(theGameTime);
             Portal2.Update(theGameTime);
 
-            foreach (Actor spr in InPortal1)
+            foreach (Actor spr in mInPortal1)
             {
                 HandleSpriteInPortal(spr, Portal1, Portal2, (float)theGameTime.TotalGameTime.TotalSeconds);
             }
 
-            foreach (Actor spr in InPortal2)
+            foreach (Actor spr in mInPortal2)
             {
                 HandleSpriteInPortal(spr, Portal2, Portal1, (float)theGameTime.TotalGameTime.TotalSeconds);
             }
@@ -139,12 +139,12 @@ namespace Half_Caked
 
         public void Draw(SpriteBatch theSpriteBatch, Vector2 Relative)
         {
-            foreach (Actor spr in InPortal1)
+            foreach (Actor spr in mInPortal1)
             {
                 spr.PortalDraw(theSpriteBatch, Relative);
             }
 
-            foreach (Actor spr in InPortal2)
+            foreach (Actor spr in mInPortal2)
             {
                 spr.PortalDraw(theSpriteBatch, Relative);
             }

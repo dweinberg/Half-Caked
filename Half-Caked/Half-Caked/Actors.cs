@@ -46,4 +46,19 @@ namespace Half_Caked
         }
         #endregion
     }
+
+    class Enemy : Actor
+    {
+        List<EnemyBullet> mBullets;
+
+        public override void Update(GameTime theGameTime)
+        {
+            base.Update(theGameTime);
+        }
+
+        public void Fire()
+        {
+
+        }
+    }
 }

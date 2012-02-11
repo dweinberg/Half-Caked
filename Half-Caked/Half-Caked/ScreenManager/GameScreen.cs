@@ -114,8 +114,7 @@ namespace Half_Caked
             protected set { screenState = value; }
         }
 
-        ScreenState screenState = ScreenState.TransitionOn;
-
+        ScreenState screenState = ScreenState.Hidden;
 
         /// <summary>
         /// There are two possible reasons why a screen might be transitioning

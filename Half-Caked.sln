@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Half-Caked", "Half-Caked\Ha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Half-Caked Content", "Half-Caked\Half-Caked Content\Half-Caked Content.contentproj", "{0D2F41CE-28A0-4DAD-9271-842F0ED5095B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAAFD805-3DFC-4507-8879-595676F8D448}"
+	ProjectSection(SolutionItems) = preProject
+		Half-Caked.vsd = Half-Caked.vsd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

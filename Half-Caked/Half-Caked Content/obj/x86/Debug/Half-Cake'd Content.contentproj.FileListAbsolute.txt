@@ -1,2 +1,0 @@
-C:\Users\David\Downloads\thewizardducking\TheWizard - Ducking\TheWizard - Ducking\TheWizard - DuckingContent\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\David\Downloads\Half-Cake'd\Half-Cake'd\Half-Cake'd\Half-Cake'd Content\obj\x86\Debug\ResolveAssemblyReference.cache

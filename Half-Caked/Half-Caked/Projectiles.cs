@@ -211,4 +211,17 @@ namespace Half_Caked
         }
         #endregion
     }
+    
+    class EnemyBullet : Projectiles
+    {
+        protected override void HandleTileCollision(Tile tile, Rectangle result, Level level)
+        {
+            
+        }
+
+        protected override void HandleObstacleCollision(Obstacle obs, Rectangle result, Level level)
+        {
+
+        }
+    }
 }

@@ -48,28 +48,28 @@ namespace Half_Caked
             lvl.AssetName = "Level1";
             lvl.LevelIdentifier = 1;
 
-            lvl.mCheckpoints.Add(new Checkpoint(270, 661 - 134, 0, 0, 4));
-            lvl.mCheckpoints.Add(new Checkpoint(680, 661 - 134, 680, 1024, 1));
-            lvl.mCheckpoints.Add(new Checkpoint(1180, 661 - 134, 1180, 602, 1));
+            lvl.Checkpoints.Add(new Checkpoint(270, 661 - 134, 0, 0, 4));
+            lvl.Checkpoints.Add(new Checkpoint(680, 661 - 134, 680, 1024, 1));
+            lvl.Checkpoints.Add(new Checkpoint(1180, 661 - 134, 1180, 602, 1));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 301,147), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(301, 0, 361,147), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(662, 0, 49, 4), .40f, Surface.Death));
-            lvl.Tiles.Add(new Tile(new Rectangle(711, 0, 569, 147), .40f, Surface.Amplifies));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 301,147), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(301, 0, 361,147), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(662, 0, 49, 4), Surface.Death));
+            lvl.Tiles.Add(new Tile(new Rectangle(711, 0, 569, 147), Surface.Amplifies));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 490, 215, 174), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 490+174, 215, 363), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(215, 1024 - 363, 458-215, 363), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(936, 1024 - 421, 344, 421), .05f, Surface.Reflects));
-            lvl.Tiles.Add(new Tile(new Rectangle(458, 490, 215, 174), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(458, 490+174, 215, 343), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(458+215, 1024 - 363, 830-458-215, 363), .40f, Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 490, 215, 174), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 490+174, 215, 363), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(215, 1024 - 363, 458-215, 363), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(936, 1024 - 421, 344, 421), Surface.Reflects));
+            lvl.Tiles.Add(new Tile(new Rectangle(458, 490, 215, 174), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(458, 490+174, 215, 343), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(458+215, 1024 - 363, 830-458-215, 363), Surface.Normal));
             
             //Boundaries
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 1024 - 2, 1280, 2), .40f, Surface.Death));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 1280, 2), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 2, 1024), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(1280 - 2, 0, 2, 1024), .40f, Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 1024 - 2, 1280, 2), Surface.Death));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 1280, 2), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 2, 1024), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(1280 - 2, 0, 2, 1024), Surface.Absorbs));
 
             return lvl;
         }
@@ -84,32 +84,32 @@ namespace Half_Caked
             lvl.AssetName = "Level0";
             lvl.LevelIdentifier = 0;
 
-            lvl.Tiles.Add(new Tile(new Rectangle(778, 0, 186, 281), .80f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(964, 0, 420, 195), .40f, Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(778, 0, 186, 281), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(964, 0, 420, 195), Surface.Normal));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 473, 301, 151), .80f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(301, 473, 411, 151), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(711, 473, 569, 151), .20f, Surface.Amplifies));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 473, 301, 151), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(301, 473, 411, 151), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(711, 473, 569, 151), Surface.Amplifies));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 1500 - 364, 216, 364), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(216, 1500 - 364, 240, 364), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(456, 1500 - 364, 216, 364), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(672, 1500 - 364, 159, 364), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 966, 216, 170), .40f, Surface.Normal));
-            lvl.Tiles.Add(new Tile(new Rectangle(456, 966, 215, 170), .40f, Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 1500 - 364, 216, 364), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(216, 1500 - 364, 240, 364), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(456, 1500 - 364, 216, 364), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(672, 1500 - 364, 159, 364), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 966, 216, 170), Surface.Normal));
+            lvl.Tiles.Add(new Tile(new Rectangle(456, 966, 215, 170), Surface.Normal));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(936, 1500 - 421, 485, 421), .05f, Surface.Reflects));
+            lvl.Tiles.Add(new Tile(new Rectangle(936, 1500 - 421, 485, 421), Surface.Reflects));
 
-            lvl.Tiles.Add(new Tile(new Rectangle(1718, 915, 282, 585), .80f, Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(1718, 915, 282, 585), Surface.Absorbs));
 
-            lvl.mCheckpoints.Add(new Checkpoint(270, 1136 - 134, 0, 0, 4));
-            lvl.mCheckpoints.Add(new Checkpoint(680, 1136 - 134, 680, 1024, 1));
-            lvl.mCheckpoints.Add(new Checkpoint(1180, 1079 - 134, 1180, 1500, 1));
-            lvl.mCheckpoints.Add(new Checkpoint(1165, 473 - 134, 1275, 473, 2));
-            lvl.mCheckpoints.Add(new Checkpoint(75, 473 - 134, 100, 473, 2));
+            lvl.Checkpoints.Add(new Checkpoint(270, 1136 - 134, 0, 0, 4));
+            lvl.Checkpoints.Add(new Checkpoint(680, 1136 - 134, 680, 1024, 1));
+            lvl.Checkpoints.Add(new Checkpoint(1180, 1079 - 134, 1180, 1500, 1));
+            lvl.Checkpoints.Add(new Checkpoint(1165, 473 - 134, 1275, 473, 2));
+            lvl.Checkpoints.Add(new Checkpoint(75, 473 - 134, 100, 473, 2));
 
             Switch switch1 = new Switch(System.Guid.NewGuid(), new Vector2(1980, 815), Switch.SwitchState.Active);
-            switch1.Actions.Add(new KeyValuePair<Guid, int>(Stickman.mGuid, (int)Switch.SwitchState.Pressed));
+            switch1.Actions.Add(new KeyValuePair<Guid, int>(Character.CharacterGuid, (int)Switch.SwitchState.Pressed));
             lvl.Obstacles.Add(switch1);
 
             Platform pf1 = new Platform(System.Guid.NewGuid(), new List<Vector2>() { new Vector2(1435, 1078), new Vector2(1607, 1078), new Vector2(1607, 473), new Vector2(1286, 473) }, 50, Platform.PlatformState.Forward);
@@ -121,10 +121,10 @@ namespace Half_Caked
             lvl.Obstacles.Add(d1);
 
             //Boundaries
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 1500 - 2, 2000, 2), .40f, Surface.Death));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 1500, 2), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 2, 2000), .40f, Surface.Absorbs));
-            lvl.Tiles.Add(new Tile(new Rectangle(2000 - 2, 0, 2, 1500), .40f, Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 1500 - 2, 2000, 2), Surface.Death));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 1500, 2), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 2, 2000), Surface.Absorbs));
+            lvl.Tiles.Add(new Tile(new Rectangle(2000 - 2, 0, 2, 1500), Surface.Absorbs));
 
             return lvl;
         }

@@ -12,19 +12,21 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 
-
-
 namespace Half_Caked
 {
     public class Profile
     {
         private const int PROFILE_COUNT = 3;
 
+        public Guid GlobalIdentifer = Guid.Empty;
         public int ProfileNumber = 0;
         public string Name = "";
         public int CurrentLevel = 0;
 
         public Statistics[] LevelStatistics = new Statistics[Level.MAX_LEVELS];
+        public AudioSettings Audio = new AudioSettings();
+        public GraphicsSettings Graphics = new GraphicsSettings();
+        public Keybindings KeyBindings = new Keybindings();
 
         public static void SaveProfile(Profile prof, string filename, StorageDevice device)
         {
@@ -41,6 +43,26 @@ namespace Half_Caked
             serializer.Serialize(stream, prof);
 
             stream.Close();
+            container.Dispose();
+        }
+
+        public void Delete(StorageDevice device)
+        {
+            IAsyncResult result = device.BeginOpenContainer("Profiles", null, null);
+            result.AsyncWaitHandle.WaitOne();
+            StorageContainer container = device.EndOpenContainer(result);
+            result.AsyncWaitHandle.Close();
+
+            string filename = "profile" + ProfileNumber + ".sav";
+            
+            if (!container.FileExists(filename))
+            {
+                container.DeleteFile("default.sav");
+                container.Dispose();
+                return;
+            }
+
+            container.DeleteFile(filename);
             container.Dispose();
         }
 
@@ -76,7 +98,7 @@ namespace Half_Caked
         {
             Profile[] profArray = new Profile[PROFILE_COUNT];
             Profile defProf = Load(-1, device);
-            int index = 0;
+            int index = -1;
                         
             if(defProf != null)
             {
@@ -89,6 +111,8 @@ namespace Half_Caked
             return new KeyValuePair<int, Profile[]> (index, profArray);
         }
 
+        /// <summary>
+        /// </summary>
         public static void ChangeDefault(int oldDefaultProfile, int newDefaultProfile, StorageDevice device)
         {
             IAsyncResult result = device.BeginOpenContainer("Profiles", null, null);
@@ -136,6 +160,83 @@ namespace Half_Caked
             {
                 return (int)TimeElapsed;
             }
+        }
+    }
+
+    [Serializable]
+    public class GraphicsSettings
+    {        
+        public enum WindowType
+        {
+            Fullscreen,
+            Window,
+            WindowNoBorder
+        }
+
+        public WindowType PresentationMode = WindowType.Window;
+        public Vector2 Resolution = new Vector2(1280, 768);
+    }
+
+    [Serializable]
+    public class AudioSettings
+    {
+        public int MasterVolume = 100, MusicVolume = 100, SoundEffectsVolume = 100, NarrationVolume = 100;
+        public bool Subtitles = true;
+    }
+
+    [Serializable]
+    public class Keybindings
+    {
+        public Keybinding[] MoveForward =   { Keys.D, Keys.Right  };
+        public Keybinding[] MoveBackwards = { Keys.A, Keys.Left   };
+        public Keybinding[] Crouch =        { Keys.S, Keys.Down   };
+        public Keybinding[] Jump =          { Keys.W, Keys.Up     };
+        public Keybinding[] Interact =      { Keys.E, Keys.None   };
+        public Keybinding[] Pause =         { Keys.P, Keys.Escape };
+        public Keybinding[] Portal1 =       { 1, -1 };
+        public Keybinding[] Portal2 =       { 2, -1 };            
+    }
+    
+    public class Keybinding
+    {
+        public enum InputType
+        {
+            MouseClick,
+            Key,
+            Button,
+            None
+        }
+
+        public InputType Type = InputType.None;
+        public Keys Key;
+        public int MouseClick;
+        public Buttons Button;
+
+        public static implicit operator Keybinding(Keys key)
+        {
+            Keybinding temp = new Keybinding();
+            temp.Key = key;
+            temp.Type = InputType.Key;
+            return temp;
+        }
+
+        public static implicit operator Keybinding(int i)
+        {
+            Keybinding temp = new Keybinding();
+            if (i < 1)
+                return temp;
+
+            temp.MouseClick = i;
+            temp.Type = InputType.MouseClick;
+            return temp;
+        }
+
+        public static implicit operator Keybinding(Buttons button)
+        {
+            Keybinding temp = new Keybinding();
+            temp.Button = button;
+            temp.Type = InputType.Button;
+            return temp;
         }
     }
 }

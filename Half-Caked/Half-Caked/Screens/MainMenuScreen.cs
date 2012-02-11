@@ -25,7 +25,7 @@ namespace Half_Caked
         /// Constructor fills in the menu contents.
         /// </summary>
         public MainMenuScreen()
-            : base("Main Menu")
+            : base("Half-Cake'd")
         {
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
@@ -48,7 +48,6 @@ namespace Half_Caked
 
         #region Handle Input
 
-
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.
         /// </summary>
@@ -63,7 +62,7 @@ namespace Half_Caked
         /// </summary>
         void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            ScreenManager.AddScreen(new OptionsMenuScreen((ScreenManager.Game as HalfCakedGame).CurrentProfile.Name), e.PlayerIndex);
+            ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
         }
 
 
@@ -72,13 +71,25 @@ namespace Half_Caked
         /// </summary>
         protected override void OnCancel(PlayerIndex playerIndex)
         {
-            const string message = "Are you sure you want to exit the game?";
+            if ((ScreenManager.Game as HalfCakedGame).CurrentProfile.Name.Length < 1)
+            {
+                const string message = "You have currently unsaved game progress.\nWould you like to save before you exit?";
+                MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message, new string[]{"Yes", "No", "Cancel"}, 0);
 
-            MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
+                confirmExitMessageBox.Buttons[0].Pressed += ConfirmSaveMessageBoxAccepted;
+                confirmExitMessageBox.Buttons[1].Pressed += ConfirmExitMessageBoxAccepted;
 
-            confirmExitMessageBox.Buttons[0].Pressed += ConfirmExitMessageBoxAccepted;
+                ScreenManager.AddScreen(confirmExitMessageBox, playerIndex);
+            }
+            else
+            {
+                const string message = "Are you sure you want to exit the game?";
+                MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
 
-            ScreenManager.AddScreen(confirmExitMessageBox, playerIndex);
+                confirmExitMessageBox.Buttons[0].Pressed += ConfirmExitMessageBoxAccepted;
+
+                ScreenManager.AddScreen(confirmExitMessageBox, playerIndex);
+            }
         }
 
 
@@ -91,6 +102,12 @@ namespace Half_Caked
             ScreenManager.Game.Exit();
         }
 
+        void ConfirmSaveMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
+        {
+            var pss = new ProfileSelectionScreen((ScreenManager.Game as HalfCakedGame).Device);
+            pss.ProfileSaved += ConfirmExitMessageBoxAccepted;
+            ScreenManager.AddScreen(pss, e.PlayerIndex);
+        }
 
         #endregion
     }

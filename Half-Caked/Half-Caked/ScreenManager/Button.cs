@@ -29,7 +29,21 @@ namespace Half_Caked
 
         #region Fields
 
-        public string Text;
+        private string mText;
+        public string Text
+        {
+            get { return mText; }
+            set
+            {
+                mText = value;
+                Vector2 mTextSize = mFont.MeasureString(mText);
+                mRectangle = new Rectangle(0, 0, mPaddingX * 2, mPaddingY * 2);
+                mRectangle.Width += (int)mTextSize.X;
+                mRectangle.Height += (int)Math.Max(mTextSize.Y, mFont.MeasureString(" ").Y);
+
+                mOrigin = new Vector2(mTextSize.X / 2 * (int)Alignment, mTextSize.Y / 2);
+            }
+        }
         private ButtonState mState;
         private Rectangle mSource;
         private Color mTextColor, mDimColor;
@@ -110,7 +124,7 @@ namespace Half_Caked
 
         public Button(string txt, int xPad, int yPad, TextAlignment algn)
         {
-            Text = txt;
+            mText = txt;
             mPaddingX = xPad;
             mPaddingY = yPad;
             mRectangle = new Rectangle(0, 0, xPad * 2, yPad * 2);
@@ -125,7 +139,7 @@ namespace Half_Caked
 
             Vector2 mTextSize = mFont.MeasureString(Text);
             mRectangle.Width  += (int)mTextSize.X;
-            mRectangle.Height += (int)mTextSize.Y;
+            mRectangle.Height += (int)Math.Max(mTextSize.Y, mFont.MeasureString(" ").Y);
 
             mOrigin = new Vector2(mTextSize.X / 2 * (int)Alignment, mTextSize.Y / 2);
         }

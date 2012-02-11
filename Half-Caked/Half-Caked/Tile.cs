@@ -8,32 +8,35 @@ namespace Half_Caked
 {
     public enum Surface
     {
-        Reflects = 0,
-        Absorbs,
-        Amplifies,
-        Normal,
-        Portal,
-        Death
+        Absorbs = 4,
+        Amplifies = 3,
+        Normal = 2,
+        Reflects = 1,
+        Portal = 0,
+        Death = -1
     }
 
     public class Tile
     {
         #region Fields
         public Rectangle Dimensions;
-        public float Friction;
         public Surface Type;
+
+        public float Friction
+        {
+            get { return ((int)Type) * .20f; }
+        }
         #endregion
 
         #region Initialization
         public Tile() 
-            : this(Rectangle.Empty, 0, Surface.Death)
+            : this(Rectangle.Empty, Surface.Death)
         {
         }
 
-        public Tile(Rectangle shape, float friction, Surface type)
+        public Tile(Rectangle shape, Surface type)
         {
             Dimensions = shape;
-            Friction = friction;
             Type = type;
         }
         #endregion

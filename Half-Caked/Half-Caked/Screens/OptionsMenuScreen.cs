@@ -20,102 +20,66 @@ namespace Half_Caked
     /// </summary>
     class OptionsMenuScreen : MenuScreen
     {
-        #region Fields
-
-        MenuEntry profileMenuEntry;
-        MenuEntry resolutionMenuEntry;
-        MenuEntry soundMenuEntry;
-
-        static string[] resolution = { "1280 x 1024", "1024 x 768", "1280 x 720" };
-        static int currentResolution = 0;
-
-        static bool soundEnabled = true;
-
-        #endregion
-
         #region Initialization
 
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public OptionsMenuScreen(string currentProfileName)
+        public OptionsMenuScreen()
             : base("Options")
         {
             // Create our menu entries.
-            profileMenuEntry = new MenuEntry(string.Empty);
-            resolutionMenuEntry = new MenuEntry(string.Empty);
-            soundMenuEntry = new MenuEntry(string.Empty);
-
-            profileMenuEntry.Text = "Current Profile: " + currentProfileName;
-            SetMenuEntryText();
-
+            MenuEntry profileMenuEntry = new MenuEntry("Profile");
+            MenuEntry keybindingsMenuEntry = new MenuEntry("Keybindings");
+            MenuEntry resolutionMenuEntry = new MenuEntry("Resolution");
+            MenuEntry soundMenuEntry = new MenuEntry("Sound");
             MenuEntry backMenuEntry = new MenuEntry("Back");
 
             // Hook up menu event handlers.
             profileMenuEntry.Selected += ProfileMenuEntrySelected;
+            keybindingsMenuEntry.Selected += KeybindingsMenuEntrySelected;
             resolutionMenuEntry.Selected += ResolutionMenuEntrySelected;
             soundMenuEntry.Selected += SoundMenuEntrySelected;
             backMenuEntry.Selected += OnCancel;
             
             // Add entries to the menu.
             MenuEntries.Add(profileMenuEntry);
+            MenuEntries.Add(keybindingsMenuEntry);
             MenuEntries.Add(resolutionMenuEntry);
             MenuEntries.Add(soundMenuEntry);
             MenuEntries.Add(backMenuEntry);
         }
 
-
-        /// <summary>
-        /// Fills in the latest values for the options screen menu text.
-        /// </summary>
-        void SetMenuEntryText()
-        {
-            resolutionMenuEntry.Text = "Resolution: " + resolution[currentResolution];
-            soundMenuEntry.Text = "Sound: " + (soundEnabled ? "on" : "off");
-        }
-
-        void SetProfileNameText(object sender, PlayerIndexEventArgs e)
-        {
-            profileMenuEntry.Text = "Current Profile: " + (ScreenManager.Game as HalfCakedGame).CurrentProfile.Name;
-        }
-
-        #endregion
+         #endregion
 
         #region Handle Input
 
-        /// <summary>
-        /// Event handler for when the Ungulate menu entry is selected.
-        /// </summary>
         void ProfileMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             var scrn = new ProfileSelectionScreen((ScreenManager.Game as HalfCakedGame).Device);
-            for(int i = 0; i < scrn.Buttons.Count; i++)
-                scrn.Buttons[i].Pressed += SetProfileNameText;
 
             ScreenManager.AddScreen(scrn, null);
         }
 
-
-        /// <summary>
-        /// Event handler for when the Language menu entry is selected.
-        /// </summary>
-        void ResolutionMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void KeybindingsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentResolution = (currentResolution + 1) % resolution.Length;
+            var scrn = new KeybindingsDialog((ScreenManager.Game as HalfCakedGame).CurrentProfile);
 
-            SetMenuEntryText();
+            ScreenManager.AddScreen(scrn, null);
         }
 
+        void ResolutionMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            var scrn = new GraphicsDialog((ScreenManager.Game as HalfCakedGame).CurrentProfile);
 
-        /// <summary>
-        /// Event handler for when the Frobnicate menu entry is selected.
-        /// </summary>
+            ScreenManager.AddScreen(scrn, null);
+        }
+        
         void SoundMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            soundEnabled = !soundEnabled;
-
-            SetMenuEntryText();
+            var scrn = new AudioOptionsDialog((ScreenManager.Game as HalfCakedGame).CurrentProfile);
+            ScreenManager.AddScreen(scrn, null);
         }
         
         #endregion

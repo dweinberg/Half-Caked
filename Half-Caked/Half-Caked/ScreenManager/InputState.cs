@@ -10,6 +10,8 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections;
+using System;
 #endregion
 
 namespace Half_Caked
@@ -22,6 +24,17 @@ namespace Half_Caked
     /// </summary>
     public class InputState
     {
+        #region Constants
+        Keys[] mKeysToCheck = new Keys[] {
+            Keys.A, Keys.B, Keys.C, Keys.D, Keys.E,
+            Keys.F, Keys.G, Keys.H, Keys.I, Keys.J,
+            Keys.K, Keys.L, Keys.M, Keys.N, Keys.O,
+            Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T,
+            Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y,
+            Keys.Z, Keys.Space};
+
+        #endregion
+
         #region Fields
 
         public const int MaxInputs = 4;
@@ -36,6 +49,7 @@ namespace Half_Caked
 
         public readonly bool[] GamePadWasConnected;
 
+        public Keybindings ControlMap = new Keybindings();
 
         #endregion
 
@@ -54,7 +68,6 @@ namespace Half_Caked
             LastKeyboardStates = new KeyboardState[MaxInputs];
             LastGamePadStates = new GamePadState[MaxInputs];
             LastMouseState = new MouseState();
-
             GamePadWasConnected = new bool[MaxInputs];
         }
 
@@ -116,6 +129,58 @@ namespace Half_Caked
                         IsNewKeyPress(key, PlayerIndex.Two, out playerIndex) ||
                         IsNewKeyPress(key, PlayerIndex.Three, out playerIndex) ||
                         IsNewKeyPress(key, PlayerIndex.Four, out playerIndex));
+            }
+        }
+
+        public bool IsKeyPressed(Keys key, PlayerIndex? controllingPlayer,
+                                    out PlayerIndex playerIndex)
+        {
+            if (controllingPlayer.HasValue)
+            {
+                // Read input from the specified player.
+                playerIndex = controllingPlayer.Value;
+
+                int i = (int)playerIndex;
+
+                return CurrentKeyboardStates[i].IsKeyDown(key);
+            }
+            else
+            {
+                // Accept input from any player.
+                return (IsKeyPressed(key, PlayerIndex.One, out playerIndex) ||
+                        IsKeyPressed(key, PlayerIndex.Two, out playerIndex) ||
+                        IsKeyPressed(key, PlayerIndex.Three, out playerIndex) ||
+                        IsKeyPressed(key, PlayerIndex.Four, out playerIndex));
+            }
+        }
+
+        public bool IsNewMouseClick(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    return IsNewLeftMouseClick();
+                case 2:
+                    return IsNewRightMouseClick();
+                case 3:
+                    return IsNewThirdMouseClick();
+                default:
+                    return false;
+            }
+        }
+        
+        public bool IsMousePressed(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    return CurrentMouseState.LeftButton == ButtonState.Pressed;
+                case 2:
+                    return CurrentMouseState.RightButton == ButtonState.Pressed;
+                case 3:
+                    return CurrentMouseState.MiddleButton == ButtonState.Pressed;
+                default:
+                    return false;
             }
         }
 
@@ -206,6 +271,28 @@ namespace Half_Caked
                         IsNewButtonPress(button, PlayerIndex.Two, out playerIndex) ||
                         IsNewButtonPress(button, PlayerIndex.Three, out playerIndex) ||
                         IsNewButtonPress(button, PlayerIndex.Four, out playerIndex));
+            }
+        }
+        
+        public bool IsButtonPressed(Buttons button, PlayerIndex? controllingPlayer,
+                                                     out PlayerIndex playerIndex)
+        {
+            if (controllingPlayer.HasValue)
+            {
+                // Read input from the specified player.
+                playerIndex = controllingPlayer.Value;
+
+                int i = (int)playerIndex;
+
+                return CurrentGamePadStates[i].IsButtonDown(button);
+            }
+            else
+            {
+                // Accept input from any player.
+                return (IsButtonPressed(button, PlayerIndex.One, out playerIndex) ||
+                        IsButtonPressed(button, PlayerIndex.Two, out playerIndex) ||
+                        IsButtonPressed(button, PlayerIndex.Three, out playerIndex) ||
+                        IsButtonPressed(button, PlayerIndex.Four, out playerIndex));
             }
         }
 
@@ -307,20 +394,143 @@ namespace Half_Caked
                    IsNewButtonPress(Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex);
         }
 
-        /// <summary>
-        /// Checks for a "pause the game" input action.
-        /// The controllingPlayer parameter specifies which player to read
-        /// input for. If this is null, it will accept input from any player.
-        /// </summary>
-        public bool IsPauseGame(PlayerIndex? controllingPlayer)
+        public bool IsNewKeybindingPress(PlayerIndex? controllingPlayer, Keybinding input)
         {
             PlayerIndex playerIndex;
-
-            return IsNewKeyPress(Keys.Escape, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.Back, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.Start, controllingPlayer, out playerIndex);
+            switch (input.Type)
+            {
+                case Keybinding.InputType.Button:
+                    return IsNewButtonPress(input.Button, controllingPlayer, out playerIndex);
+                case Keybinding.InputType.Key:
+                    return IsNewKeyPress(input.Key, controllingPlayer, out playerIndex);
+                case Keybinding.InputType.MouseClick:
+                    return IsNewMouseClick(input.MouseClick);
+                default:
+                    return false;
+            }
         }
 
+        public bool IsJumping(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Jump)
+                returnValue |= IsNewKeybindingPress(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsPausingGame(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Pause)
+                returnValue |= IsNewKeybindingPress(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsInteracting(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Interact)
+                returnValue |= IsNewKeybindingPress(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsFiringPortal1(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Portal1)
+                returnValue |= IsNewKeybindingPress(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsFiringPortal2(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Portal2)
+                returnValue |= IsNewKeybindingPress(controllingPlayer, input);
+
+            return returnValue;
+        }
+        
+        public bool IsKeybindingPressed(PlayerIndex? controllingPlayer, Keybinding input)
+        {
+            PlayerIndex playerIndex;
+            switch (input.Type)
+            {
+                case Keybinding.InputType.Button:
+                    return IsButtonPressed(input.Button, controllingPlayer, out playerIndex);
+                case Keybinding.InputType.Key:
+                    return IsKeyPressed(input.Key, controllingPlayer, out playerIndex);
+                case Keybinding.InputType.MouseClick:
+                    return IsMousePressed(input.MouseClick);
+                default:
+                    return false;
+            }
+        }
+
+        public bool IsDucking(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.Crouch)
+                returnValue |= IsKeybindingPressed(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsMovingForward(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.MoveForward)
+                returnValue |= IsKeybindingPressed(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public bool IsMovingBackwards(PlayerIndex? controllingPlayer)
+        {
+            bool returnValue = false;
+
+            foreach (Keybinding input in ControlMap.MoveBackwards)
+                returnValue |= IsKeybindingPressed(controllingPlayer, input);
+
+            return returnValue;
+        }
+
+        public string GetTextSinceUpdate(PlayerIndex? controllingPlayer)
+        {
+            string text = "";
+            int i = (int) (controllingPlayer.HasValue ? controllingPlayer.Value : PlayerIndex.One);
+
+            if (CurrentKeyboardStates[i].IsKeyDown(Keys.Back) && LastKeyboardStates[i].IsKeyUp(Keys.Back))
+                text = "\b";
+
+            foreach (Keys key in mKeysToCheck)
+            {
+                if (CurrentKeyboardStates[i].IsKeyDown(key) && LastKeyboardStates[i].IsKeyUp(key))
+                    if (key != Keys.Space)
+                        text += key.ToString();
+                    else
+                        text += " ";
+            }
+
+            if (!(CurrentKeyboardStates[i].IsKeyDown(Keys.LeftShift) || CurrentKeyboardStates[i].IsKeyDown(Keys.RightShift)))
+                text = text.ToLower();
+
+            if (CurrentKeyboardStates[i].IsKeyDown(Keys.Enter) && LastKeyboardStates[i].IsKeyUp(Keys.Enter))
+                text += "\n";
+            
+            return text;
+        }
 
         #endregion
     }

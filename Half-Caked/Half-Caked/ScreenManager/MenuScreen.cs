@@ -94,8 +94,8 @@ namespace Half_Caked
             bool pressed = false;
             for (int i = 0; i < menuEntries.Count; i++)
             {
-                if (input.LastMouseState.Y > yPosition && input.IsNewMouseState() && 
-                    input.LastMouseState.Y < yPosition + menuEntries[i].GetHeight(this))
+                if (input.LastMouseState.Y > yPosition - menuEntries[i].GetHeight(this)/2 && input.IsNewMouseState() && 
+                    input.LastMouseState.Y < yPosition + menuEntries[i].GetHeight(this)/2)
                 {
                     selectedEntry = i;
                     pressed = input.IsNewLeftMouseClick();

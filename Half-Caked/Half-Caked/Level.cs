@@ -17,8 +17,6 @@ namespace Half_Caked
     public class Level : Sprite
     {
         #region Constants
-        public static int GAME_WIDTH = 1024;
-        public static int GAME_HEIGHT = 768;
         public static float METERS_TO_UNITS = 20;
         public static int MAX_LEVELS = 2;
         #endregion
@@ -38,16 +36,19 @@ namespace Half_Caked
 
         protected Vector2 mCenterVector;
 
-        public List<Checkpoint> mCheckpoints;
+        public List<Checkpoint> Checkpoints;
         protected int mCheckpointIndex = 1;
 
         protected List<TextEffect> mTextEffects;
+        protected AudioSettings mAudio;
 
-        protected Stickman mCharacter;
+        protected Character mCharacter;
         protected Sprite mBackground;
 
         protected SpriteFont mGameFont;
         protected bool mGameOver = false;
+
+        private Vector2 mDimensions;
         #endregion
 
         #region Initialization
@@ -57,24 +58,27 @@ namespace Half_Caked
             mBackground = new Sprite();
             Obstacles = new List<Obstacle>();
             Actors = new List<Actor>();
-            mCheckpoints = new List<Checkpoint>();
+            Checkpoints = new List<Checkpoint>();
             mTextEffects = new List<TextEffect>();
             Tiles = new List<Tile>();
             Portals = new PortalGroup();
 
-            mCenterVector = new Vector2(Level.GAME_WIDTH / 2 - 100, Level.GAME_HEIGHT * 3 / 4 - 100);
         }
 
-        public virtual void LoadContent(ContentManager theContentManager)
+        public virtual void LoadContent(ContentManager theContentManager, Profile activeProfile)
         {
             base.LoadContent(theContentManager, AssetName);
             mBackground.LoadContent(theContentManager, AssetName + "b");
 
-            Portals.LoadContent(theContentManager);
+            mDimensions = activeProfile.Graphics.Resolution;
+            mCenterVector = new Vector2(mDimensions.X / 2 - 100, mDimensions.Y * 3 / 4 - 100);
+            mAudio = activeProfile.Audio;
 
-            mCharacter = new Stickman();
+            Portals.LoadContent(theContentManager);
+            
+            mCharacter = new Character();
             mCharacter.LoadContent(theContentManager);
-            mCharacter.Position = mCharacter.InitialPosition = mCheckpoints[0].Location;
+            mCharacter.Position = mCharacter.InitialPosition = Checkpoints[0].Location;
 
             foreach (Obstacle spr in Obstacles)
                 spr.LoadContent(theContentManager, spr.AssetName);
@@ -87,7 +91,7 @@ namespace Half_Caked
         #endregion
 
         #region Update and Draw
-        public override void Update(GameTime theGameTime)
+        public void Update(GameTime theGameTime, InputState inputState)
         {
             KeyboardState aCurrentKeyboardState = Keyboard.GetState();
             MouseState aCurrentMouseState = Mouse.GetState();
@@ -98,7 +102,7 @@ namespace Half_Caked
             foreach (Obstacle spr in Obstacles)
                 spr.Update(theGameTime);
 
-            mCharacter.Update(theGameTime, this);
+            mCharacter.Update(theGameTime, this, inputState);
 
             foreach (Actor spr in Actors)
             {
@@ -115,14 +119,14 @@ namespace Half_Caked
             Portals.Update(theGameTime);
             
             Position = mCenterVector - mCharacter.Position;
-            Position = new Vector2(MathHelper.Clamp(Position.X, Level.GAME_WIDTH - Size.Width, 0), MathHelper.Clamp(Position.Y, Level.GAME_HEIGHT - Size.Height, 0));
+            Position = new Vector2(MathHelper.Clamp(Position.X, mDimensions.X - Size.Width, 0), MathHelper.Clamp(Position.Y, mDimensions.Y - Size.Height, 0));
 
             mBackground.Position = Position;
             
             if(mCharacter.IsGrounded())
-                while (mCheckpoints[mCheckpointIndex].InBounds(mCharacter.Position))
+                while (Checkpoints[mCheckpointIndex].InBounds(mCharacter.Position))
                 {
-                    if (++mCheckpointIndex >= mCheckpoints.Count)
+                    if (++mCheckpointIndex >= Checkpoints.Count)
                     {
                         GameOver();
                     }
@@ -185,7 +189,7 @@ namespace Half_Caked
         {
             LevelStatistics.Deaths++;
             mCharacter.DeathReset();
-            mCharacter.Position = mCheckpoints[mCheckpointIndex-1].Location;
+            mCharacter.Position = Checkpoints[mCheckpointIndex-1].Location;
         }
         #endregion
 
