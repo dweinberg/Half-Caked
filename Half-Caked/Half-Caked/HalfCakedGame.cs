@@ -63,8 +63,8 @@ namespace Half_Caked
                 CurrentProfile = new Profile();//screenManager.AddScreen(new ProfileSelectionScreen(Device), null);
 
             UpdateGraphics();
-            LevelCreator.CreateAndSaveLevel(0);
-            LevelCreator.CreateAndSaveLevel(1);
+            //LevelCreator.CreateAndSaveLevel(0);
+            //LevelCreator.CreateAndSaveLevel(1);
         }
 
         /// <summary>

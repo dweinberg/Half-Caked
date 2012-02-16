@@ -243,7 +243,7 @@
           <Value>1</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>403bc8b9-c600-45d0-89fa-b32575feb242</Guid>
+      <Guid>b34e832c-c105-41ee-bdbc-ccd36ff130e8</Guid>
       <InitialState>2</InitialState>
     </Obstacle>
     <Obstacle xsi:type="Platform">
@@ -254,11 +254,11 @@
       </InitialPosition>
       <Actions>
         <KeyValuePairOfGuidInt32>
-          <Key>403bc8b9-c600-45d0-89fa-b32575feb242</Key>
+          <Key>b34e832c-c105-41ee-bdbc-ccd36ff130e8</Key>
           <Value>0</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>39ed2c04-b7e5-4687-939f-1377eed13e7f</Guid>
+      <Guid>431da9d0-5934-4af6-829c-c010f3693214</Guid>
       <InitialState>1</InitialState>
       <Path>
         <Vector2>
@@ -288,15 +288,24 @@
       </InitialPosition>
       <Actions>
         <KeyValuePairOfGuidInt32>
-          <Key>403bc8b9-c600-45d0-89fa-b32575feb242</Key>
+          <Key>b34e832c-c105-41ee-bdbc-ccd36ff130e8</Key>
           <Value>1</Value>
         </KeyValuePairOfGuidInt32>
       </Actions>
-      <Guid>e1a6643e-c90a-48e7-81aa-2d22557648c1</Guid>
+      <Guid>34bfc813-fdc3-4c0c-ba6f-8c31a452bf98</Guid>
       <InitialState>0</InitialState>
     </Obstacle>
   </Obstacles>
-  <Actors />
+  <Actors>
+    <Actor xsi:type="Enemy">
+      <AssetName>Sprites\Enemy</AssetName>
+      <InitialPosition>
+        <X>370</X>
+        <Y>472</Y>
+      </InitialPosition>
+      <Range>300</Range>
+    </Actor>
+  </Actors>
   <Checkpoints>
     <Checkpoint>
       <Location>
