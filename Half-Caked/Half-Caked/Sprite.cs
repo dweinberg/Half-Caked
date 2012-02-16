@@ -58,11 +58,14 @@ namespace Half_Caked
             get
             {
                 Rectangle rectReturn = Rectangle.Empty;
-                rectReturn.Height = Math.Abs((int)(Math.Sin(Angle) * Size.Width + Math.Cos(Angle) * Size.Height));
-                rectReturn.Width = Math.Abs((int)(Math.Sin(Angle) * Size.Height + Math.Cos(Angle) * Size.Width));
+
+                float absAngle = Math.Abs(Angle);
+
+                rectReturn.Height = Math.Abs((int)(Math.Sin(absAngle) * Size.Width + Math.Cos(absAngle) * Size.Height));
+                rectReturn.Width = Math.Abs((int)(Math.Sin(absAngle) * Size.Height + Math.Cos(absAngle) * Size.Width));
 
                 var rot = Matrix.CreateRotationZ(Angle);
-                var toCenter = Vector2.Transform(new Vector2(Size.Width / 2, Size.Height / 2) - Center, rot);
+                var toCenter = Vector2.Transform(new Vector2(Size.Width / 2f, Size.Height / 2f) - Center, rot);
 
                 rectReturn.X = (int)(Position.X - rectReturn.Width/2 + toCenter.X);
                 rectReturn.Y = (int)(Position.Y - rectReturn.Height / 2 + toCenter.Y);

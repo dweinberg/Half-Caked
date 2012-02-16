@@ -153,6 +153,7 @@ namespace Half_Caked
         public DateTime Date;
         public double TimeElapsed;
         public int Deaths;
+        public int PortalsOpened;
 
         public int Score
         {

@@ -29,6 +29,9 @@ namespace Half_Caked
 
         public void CheckCollisions(Level level)
         {
+            if (!Visible)
+                return;
+
             if (Position.X != MathHelper.Clamp(Position.X, 0, level.Size.Width - Size.Width) ||
                 Position.Y != MathHelper.Clamp(Position.Y, 0, level.Size.Height - Size.Height))
             {
@@ -70,7 +73,6 @@ namespace Half_Caked
         {
             base.Reset();
             Visible = false;
-            Scale = .1f;
         }
         #endregion
 
@@ -98,6 +100,16 @@ namespace Half_Caked
             Visible = false;
             mPortalNumber = classification;
         }
+        #endregion
+
+        #region Public Methods
+
+        public override void Reset()
+        {
+            base.Reset();
+            Scale = .1f;
+        }
+
         #endregion
 
         #region Private Methods
@@ -233,27 +245,31 @@ namespace Half_Caked
         public void LoadContent(ContentManager theContentManager)
         {
             base.LoadContent(theContentManager, "Sprites\\EnemyBullet");
-            mFireSound = theContentManager.Load<SoundEffect>("Sound\\EnemyFire");
-            Source = new Rectangle(200, 0, 200, Source.Height);
-            Center = new Vector2(10, 10);
-            Scale = 0.1f;
+            mFireSound = theContentManager.Load<SoundEffect>("Sounds\\EnemyFire");
+            Source = new Rectangle(0, 0, 20, 9);
+            Center = new Vector2(10, 4.5f);
+            mSpeed = 200;
             Visible = false;
         }
         #endregion
 
         protected override void HandleTileCollision(Tile tile, Rectangle result, Level level)
         {
-            
+            this.Visible = false;
+            Velocity = Acceleration = Vector2.Zero;
         }
 
         protected override void HandleObstacleCollision(Obstacle obs, Rectangle result, Level level)
         {
-
+            this.Visible = false;
+            Velocity = Acceleration = Vector2.Zero;
         }
 
         protected override void HandlePlayerCollision(Level level)
         {
-
+            this.Visible = false;
+            Velocity = Acceleration = Vector2.Zero;
+            level.Player.Die(level);
         }
     }
 }

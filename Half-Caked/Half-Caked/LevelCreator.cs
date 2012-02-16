@@ -120,6 +120,9 @@ namespace Half_Caked
             d1.Actions.Add(new KeyValuePair<Guid, int>(switch1.Guid, (int)Door.DoorState.Opening));
             lvl.Obstacles.Add(d1);
 
+            Enemy e1 = new Enemy(new Vector2(370, 472), 300);
+            lvl.Actors.Add(e1);
+
             //Boundaries
             lvl.Tiles.Add(new Tile(new Rectangle(0, 1500 - 2, 2000, 2), Surface.Death));
             lvl.Tiles.Add(new Tile(new Rectangle(0, 0, 1500, 2), Surface.Absorbs));

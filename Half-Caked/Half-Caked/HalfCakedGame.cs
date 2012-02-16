@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-/* SOUNDS OBTAINED FROM MICROSOFT SOUNDLAB, PlATFORMER STARTER KIT AND KEVIN MACLEOD */
+/* SOUNDS OBTAINED FROM MICROSOFT SOUNDLAB, PlATFORMER STARTER KIT AND KEVIN MACLEOD 
+    GSM used for Screen/UI Code and associated images in UI folder*/
 
 namespace Half_Caked
 {

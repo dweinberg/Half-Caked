@@ -90,6 +90,7 @@ namespace Half_Caked
         {
             LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
                                                            new MainMenuScreen());
+            Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
         }
 
         void ConfirmResetMessageBoxAccepted(object sender, PlayerIndexEventArgs e)

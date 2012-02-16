@@ -84,8 +84,8 @@ namespace Half_Caked
                 }
                 mState = PortalState.Open;
                 lvl.PlaySoundEffect(mOpenPortalEffect);
-            }            
-
+            }
+            lvl.LevelStatistics.PortalsOpened++;
         }
 
         public void Close(int portalNumber)

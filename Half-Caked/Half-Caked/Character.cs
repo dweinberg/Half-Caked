@@ -203,6 +203,12 @@ namespace Half_Caked
             StopDucking();
         }
 
+        public void Die(Level level)
+        {
+            level.PlaySoundEffect(mDeathEffect);
+            level.PlayerDeath();
+        }
+
         public void DeathReset()
         {
             base.Reset();
@@ -409,7 +415,7 @@ namespace Half_Caked
                 mOrbs[0].Update(theGameTime);
                 mOrbs[0].CheckCollisions(level);
             }
-            else if (inputState.IsFiringPortal1(null))
+            else if (inputState.IsFiringPortal1(null) && level.Portals.CanClose())
             {
                 ShootProjectile(0, inputState.CurrentMouseState, level);
                 mOrbs[0].CheckCollisions(level);
@@ -421,7 +427,7 @@ namespace Half_Caked
                 mOrbs[1].Update(theGameTime);
                 mOrbs[1].CheckCollisions(level);
             }
-            else if (inputState.IsFiringPortal2(null))
+            else if (inputState.IsFiringPortal2(null) && level.Portals.CanClose())
             {
                 ShootProjectile(1, inputState.CurrentMouseState, level);
                 mOrbs[1].CheckCollisions(level);
@@ -438,13 +444,6 @@ namespace Half_Caked
                             Vector2.Zero,
                             level);
         }
-        
-        private void Die(Level level)
-        {
-            level.PlaySoundEffect(mDeathEffect);
-            level.PlayerDeath();
-        }
-
         #endregion
     }
 

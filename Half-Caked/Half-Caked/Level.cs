@@ -120,8 +120,7 @@ namespace Half_Caked
 
             foreach (Actor spr in Actors)
             {
-                spr.Update(theGameTime);
-                spr.CheckCollisions(this);
+                spr.Update(theGameTime, this);
             }
 
             mTextEffects = mTextEffects.Where(x => !x.Done).ToList();
